@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        gap: 3cm;
+        background-image: url("tic-tac-toe.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        object-fit: cover;
+        overflow-x: hidden;
+      }
+      .result {
+        margin-top: 2cm;
+        font-weight: bold;
+        text-align: center;
+        height: 5cm;
+        width: 6cm;
+        border: 2px solid white;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        box-shadow: 8px 8px 15px white;
+      }
+      .info {
+        margin-top: 3cm;
+        height: 10cm;
+        width: 10cm;
+        border: 2px solid white;
+        border-radius: 40px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        box-shadow: 8px 8px 15px rgb(255, 255, 255);
+
+      }
+      .title {
+        margin-left: 1cm;
+        margin-top: 1cm;
+        height: 1.3cm;
+        width: 8cm;
+        text-align: center;
+      }
+      .rules {
+        margin-left: 1cm;
+        height: 6cm;
+        width: 8cm;
+      }
+      .square {
+        margin-top: 3cm;
+        border: 2px solid white;
+        border-radius: 20px;
+        height: 13cm;
+        width: 13cm;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        box-shadow: 8px 8px 15px white;
+
+      }
+      .row1,
+      .row2,
+      .row3 {
+        height: 3cm;
+        width: 13cm;
+        display: flex;
+        margin-top: 1cm;
+      }
+      .box {
+        border: 1px solid black;
+        border-radius: 20px;
+        height: 3cm;
+        width: 3cm;
+        margin-left: 1cm;
+        text-align: center;
+        font-size: 1cm;
+        color: black;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+      }
+      .box:hover {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="info">
+      <div class="title">
+        <p style="font-size: 0.8cm"><b>TIK TAK TOE</b></p>
+      </div>
+      <hr style="color: black" />
+      <div class="rules">
+        <p style="font-size: 0.6cm; font-weight: 100">
+          <b>
+            1. X will be the first clicker.<br /><br />
+            2. The first 3-join of X or O will be the winner.<br /><br />
+            3. The join can be diagonal, vertical, or horizontal.
+          </b>
+        </p>
+      </div>
+    </div>
+
+    <div class="square">
+      <div class="row1">
+        <button class="box" id="box1"></button>
+        <button class="box" id="box2"></button>
+        <button class="box" id="box3"></button>
+      </div>
+
+      <div class="row2">
+        <button class="box" id="box4"></button>
+        <button class="box" id="box5"></button>
+        <button class="box" id="box6"></button>
+      </div>
+
+      <div class="row3">
+        <button class="box" id="box7"></button>
+        <button class="box" id="box8"></button>
+        <button class="box" id="box9"></button>
+      </div>
+    </div>
+
+    <div class="result">
+        <div class="text"><p style=" color: white;">WINNER</p></div>
+        <hr>
+        <div id="resultid"><p id="result" style=" font-size: 1cm; color: white;"></p></div>
+    </div>
+
+    <script>
+      let count = 2;
+      let gameOver = false;
+
+      // Function to check if there is a winner
+      function checkWinner() {
+        const box1 = document.getElementById("box1").textContent;
+        const box2 = document.getElementById("box2").textContent;
+        const box3 = document.getElementById("box3").textContent;
+        const box4 = document.getElementById("box4").textContent;
+        const box5 = document.getElementById("box5").textContent;
+        const box6 = document.getElementById("box6").textContent;
+        const box7 = document.getElementById("box7").textContent;
+        const box8 = document.getElementById("box8").textContent;
+        const box9 = document.getElementById("box9").textContent;
+
+        // Winning combinations
+        const winningCombinations = [
+          [box1, box2, box3],
+          [box4, box5, box6],
+          [box7, box8, box9],
+          [box1, box4, box7],
+          [box2, box5, box8],
+          [box3, box6, box9],
+          [box1, box5, box9],
+          [box3, box5, box7],
+        ];
+
+        // Check each combination for a win
+        for (const combo of winningCombinations) {
+          if (combo[0] !== "" && combo[0] === combo[1] && combo[1] === combo[2]) {
+            return combo[0];
+          }
+        }
+
+        return null;
+      }
+
+      // Function to display the result
+      function displayResult(result) {
+        const resultDiv = document.getElementById("result");
+        if (result) {
+          resultDiv.textContent = result;
+          gameOver = true;
+        } else if (count === 11) {
+          resultDiv.textContent = "It's a Draw!";
+          gameOver = true;
+        }
+      }
+
+      // Handle box clicks
+      document.querySelectorAll(".box").forEach((box) => {
+        box.onclick = function () {
+          if (!gameOver && box.textContent === "") {
+            if (count % 2 == 0) {
+              box.textContent = "X";
+              box.style.backgroundColor="lightcoral";
+              count++;
+            } else {
+              box.textContent = "O";
+              box.style.backgroundColor="lightgreen";
+              count++;
+            }
+
+            // Check for winner after each click
+            const winner = checkWinner();
+            displayResult(winner);
+          }
+        };
+      });
+    </script>
+  </body>
+</html>
